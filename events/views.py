@@ -4,6 +4,13 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 # Create your views here.
 
+def register(request):
+    return render(request, 'register.html')
+
+def login(request):
+    
+    return render(request, 'login.html')
+
 def eventList(request):
     events = read_json()
     return render(request, 'events.html', {'events': events})
