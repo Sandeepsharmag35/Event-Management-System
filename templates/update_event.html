@@ -1,5 +1,51 @@
 {% extends 'events.html' %}
 {% block title %}Update Event{% endblock %}
 {% block content %}
+{% if messages %}
+<div class="container mt-4">
+    {% for message in messages %}
+    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+        {{ message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    {% endfor %}
+</div>
+{% endif %}
+<h1 class="text-center">Update Event</h1>
+{% if event %}
+<div class="container mt-4">
+    <form action="{% url 'update_event' event.id %}" method="post">
+        {% csrf_token %}
 
+        <div class="form-group">
+            <label for="inputTitle">Title</label>
+            <input type="text" class="form-control" id="inputTitle" name="title" value="{{event.title}}">
+        </div>
+        <div class="form-group">
+            <label for="inputDescription">Description</label>
+            <textarea class="form-control" id="inputDescription" name="description">{{event.description}}</textarea>
+        </div>
+        <div class="form-group">
+            <label for="inputParticipants">Total Participants</label>
+            <input type="number" class="form-control" id="inputParticipants" name="total_participants"
+                value="{{event.total_participants}}" placeholder="eg. 10">
+        </div>
+        <div class="form-row">
+            <div class="form-group col-md-4">
+                <label for="inputStartDate">Start Date</label>
+                <input type="date" class="form-control" id="inputStartDate" placeholder="" name="start_date"
+                    value="{{event.start_date}}">
+            </div>
+            <div class="form-group col-md-4">
+                <label for="inputEndDate">End Date</label>
+                <input type="date" class="form-control" id="inputEndDate" placeholder="" name="end_date"
+                    value="{{event.end_date}}">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+</div>
+{% endif %}
 {% endblock %}

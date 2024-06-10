@@ -2,14 +2,72 @@ from django.shortcuts import render, redirect
 from .utils import read_json, write_json
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
+from django.contrib.auth.models import User
+from django.contrib.auth import login as auth_login, authenticate, logout
 # Create your views here.
 
 def register(request):
-    return render(request, 'register.html')
+    if request.method == 'POST':
+        uname = request.POST['username']
+        email = request.POST['email']
+        password = request.POST['password']
+        confirm_password = request.POST['c_password']
+
+        if password != confirm_password:
+            messages.error(request, "Password and confirm password do not match")
+            return redirect('register')
+        
+        if User.objects.filter(username=uname).exists():
+            messages.error(request, "Username already taken, try another.")
+            return redirect('register')
+
+        # Checking if email already exists
+        if User.objects.filter(email=email).exists():
+            messages.error(request, "Entered Email is already associated with other account, try another")
+            return redirect('register')
+
+        else:
+            myuser = User.objects.create_user(uname, email, password)
+            myuser.save()
+
+            user = authenticate(request, username=uname, password=password)
+            if user is not None:
+                auth_login(request, user)
+                return redirect("/")
+            else:
+                # Handle the case when authentication fails
+                messages.error(request, "Registration successful, but failed to log in. Please try logging in manually.")
+                return redirect('login')
+
+    return render(request, "register.html")
+
 
 def login(request):
-    
+    if request.method == 'POST':
+        email = request.POST['email']
+        password = request.POST['password']
+
+        try:
+            user = User.objects.get(email=email)
+
+        except User.DoesNotExist:
+            messages.error(request, "Email not found")
+            return redirect('login')
+        
+        user = authenticate(request, username=user.username, password=password)
+
+        if user is not None:
+            auth_login(request, user)
+            messages.success(request, "Login successfull!")
+            return redirect('/')
+        else:
+            messages.error(request, "Invalid login credentials")
+            return redirect('login')
     return render(request, 'login.html')
+
+def Logout(request):
+    logout(request)
+    return redirect('/')
 
 def eventList(request):
     events = read_json()
@@ -47,7 +105,7 @@ def event_update(request, event_id):
         event['end_date'] = request.POST['end_date']
         write_json(events)
         messages.success(request, 'Event updated successfully!')
-        return redirect('event_list')
+        return redirect('events')
     return render(request, 'update_event.html', {'event': event})
 
 def delete_event(request, event_id):
@@ -55,19 +113,4 @@ def delete_event(request, event_id):
     events = [e for e in events if e['id'] != event_id]
     write_json(events)
     messages.success(request, 'Event deleted successfully!')
-    return redirect('events.html')
-
-def filter_events(request):
-    events = read_json()
-    title = request.GET.get('title')
-    start_date = request.GET.get('start_date')
-    end_date = request.GET.get('end_date')
-
-    if title:
-        events = [event for event in events if title.lower() in event['title'].lower()]
-    if start_date:
-        events = [event for event in events if event['start_date'] >= start_date]
-    if end_date:
-        events = [event for event in events if event['end_date'] <= end_date]
-
-    return render(request, 'events.html', {'events': events})
+    return redirect('events')
