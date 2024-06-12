@@ -69,6 +69,10 @@ def Logout(request):
     logout(request)
     return redirect('/')
 
+def homepage(request):
+    return render(request, 'home.html')
+
+@login_required(login_url='login')
 def eventList(request):
     events = read_json()
     return render(request, 'events.html', {'events': events})

@@ -1,0 +1,107 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>
+        {% block title %}
+        Home
+        {% endblock %}
+    </title>
+    <!-- Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'datatable/datatables.css' %}">
+    <script src="{% static 'datatable/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'datatable/datatables.js' %}"></script>
+    <script src="https://kit.fontawesome.com/e36506d634.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-dark navbar-expand-sm bg-success mb-4">
+        <div class="container">
+            <a href="/" class="navbar-brand">
+                <i class="fas fa-blog"></i> &nbsp;
+                Event Management System
+            </a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarCollapse">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div id="navbarCollapse" class="collapse navbar-collapse">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a href="/" class="nav-link active">
+                            Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="{% url 'events' %}" class="nav-link active">
+                            Events
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        {% if user.is_authenticated %}
+                    <li class="nav-item dropdown">
+                        <a class="nav-link dropdown-toggle active" href="#" id="navbarDropdown" role="button"
+                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {{ request.user }} <i class="fa fa-user" aria-hidden="true"></i>
+
+                        </a>
+                        <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                            <a class="dropdown-item" href="{% url 'logout' %}">Logout</a>
+                        </div>
+                    </li>
+                    {% else %}
+                    <a href="{% url 'login' %}" class="nav-link active">
+                        Login <i class="fa fa-user" aria-hidden="true"></i>
+                    </a>
+                    {% endif %}
+                    </li>
+
+                </ul>
+            </div>
+        </div>
+    </nav>
+    {% block content %}
+    <section class="main-section">
+        <!-- <img src="{% static 'images/event-management.jpgg' %}" alt="Background Image">
+        Replace with your background image -->
+        <div class="content">
+            <h1 class="text-info">Welcome to Event Management</h1>
+            <p class="text-primary">Manage your events efficiently and effectively</p>
+            <a href="{% url 'events' %}" class="btn btn-primary">Get Started</a>
+        </div>
+    </section>
+
+    {% endblock %}
+    <!-- Footer -->
+    <footer class="footer bg-dark text-light text-center py-3">
+        <div class="container">
+            <p class="mb-0">&copy;
+                <script> document.write(new Date().getFullYear())</script> <a class="footer-link"
+                    href="{% url 'home' %}">Event
+                    Management</a>. All rights reserved.
+            </p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap JS and dependencies -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script src="{% static 'datatable/jquery-3.6.0.js' %}"></script>
+    <script src="{% static 'datatable/datatables.js' %}"></script>
+    <script>
+        $(document).ready(function () {
+            $('#example').DataTable({
+                responsive: true
+            });
+        });
+    </script>
+</body>
+
+</html>

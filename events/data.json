@@ -3,7 +3,7 @@
         "id": 1,
         "title": "Birthday Party",
         "description": "Birthday party description",
-        "total_participants": "21",
+        "total_participants": "25",
         "start_date": "2024-06-12",
         "end_date": "2024-06-12"
     },
@@ -19,7 +19,7 @@
         "id": 3,
         "title": "Welcome Program",
         "description": "Welcome program description",
-        "total_participants": "60",
+        "total_participants": "80",
         "start_date": "2024-06-25",
         "end_date": "2024-06-25"
     },

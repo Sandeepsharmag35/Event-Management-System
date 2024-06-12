@@ -1,5 +1,5 @@
-{% extends 'home.html' %}
-{% block title %}Update Event{% endblock %}
+{% extends 'events.html' %}
+{% block title %}Add Event{% endblock %}
 {% block content %}
 {% if messages %}
 <div class="container mt-4">
@@ -13,39 +13,42 @@
     {% endfor %}
 </div>
 {% endif %}
-<h1 class="text-center">Update Event</h1>
-{% if event %}
+<h1 class="text-center">Add Event</h1>
 <div class="container mt-4">
-    <form action="{% url 'update_event' event.id %}" method="post">
+    <form action="{% url 'add_event' %}" method="post">
         {% csrf_token %}
 
         <div class="form-group">
             <label for="inputTitle">Title</label>
-            <input type="text" class="form-control" id="inputTitle" name="title" value="{{event.title}}">
+            <input type="text" class="form-control" id="inputTitle" name="title">
         </div>
         <div class="form-group">
             <label for="inputDescription">Description</label>
-            <textarea class="form-control" id="inputDescription" name="description">{{event.description}}</textarea>
+            <textarea class="form-control" id="inputDescription" name="description"></textarea>
         </div>
         <div class="form-group">
             <label for="inputParticipants">Total Participants</label>
             <input type="number" class="form-control" id="inputParticipants" name="total_participants"
-                value="{{event.total_participants}}" placeholder="eg. 10">
+                placeholder="eg. 10">
         </div>
         <div class="form-row">
             <div class="form-group col-md-4">
                 <label for="inputStartDate">Start Date</label>
-                <input type="date" class="form-control" id="inputStartDate" placeholder="" name="start_date"
-                    value="{{event.start_date}}">
+                <input type="date" class="form-control" id="inputStartDate" placeholder="" name="start_date">
             </div>
             <div class="form-group col-md-4">
                 <label for="inputEndDate">End Date</label>
-                <input type="date" class="form-control" id="inputEndDate" placeholder="" name="end_date"
-                    value="{{event.end_date}}">
+                <input type="date" class="form-control" id="inputEndDate" placeholder="" name="end_date">
             </div>
         </div>
         <button type="submit" class="btn btn-primary">Submit</button>
     </form>
 </div>
-{% endif %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var today = new Date().toISOString().split('T')[0];
+        document.getElementById('inputStartDate').setAttribute('min', today);
+        document.getElementById('inputEndDate').setAttribute('min', today);
+    });
+</script>
 {% endblock %}
